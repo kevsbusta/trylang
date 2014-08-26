@@ -1,48 +1,44 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Device Properties Example</title>
+<body>
 
-    <script type="text/javascript" charset="utf-8" src="cordova-2.5.0.js"></script>
-    <script type="text/javascript" charset="utf-8">
+<p id="demo">Click the button to get your coordinates:</p>
 
-    // Wait for Cordova to load
-    //
-    
-    
-    document.addEventListener("deviceready", onDeviceReady, false);
+<button onclick="getLocation()">Try It</button>
 
-    // Cordova is ready
-    //
-    function onDeviceReady() {
-        navigator.geolocation.getCurrentPosition(onSuccess, onError);
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition,showError);
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
     }
+}
 
-    // onSuccess Geolocation
-    //
-    function onSuccess(position) {
-        var element = document.getElementById('geolocation');
-        element.innerHTML = 'Latitude: '           + position.coords.latitude              + '<br />' +
-                            'Longitude: '          + position.coords.longitude             + '<br />' +
-                            'Altitude: '           + position.coords.altitude              + '<br />' +
-                            'Accuracy: '           + position.coords.accuracy              + '<br />' +
-                            'Altitude Accuracy: '  + position.coords.altitudeAccuracy      + '<br />' +
-                            'Heading: '            + position.coords.heading               + '<br />' +
-                            'Speed: '              + position.coords.speed                 + '<br />' +
-                            'Timestamp: '          +                                   position.timestamp          + '<br />';
+function showPosition(position) {
+    x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;	
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
     }
+}
+</script>
 
-    // onError Callback receives a PositionError object
-    //
-    function onError(error) {
-        alert('code: '    + error.code    + '\n' +
-                'message: ' + error.message + '\n');
-    }
-
-    </script>
-  </head>
-  <body>
-    <p id="geolocation">Finding geolocation...</p>
-    <button onclick="onSuccess()">Try It</button>
-  </body>
+</body>
 </html>
